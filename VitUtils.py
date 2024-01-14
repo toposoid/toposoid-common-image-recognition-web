@@ -30,7 +30,7 @@ class VitUtils():
         self.model = ViTForImageClassification.from_pretrained(os.environ["TOPOSOID_IMAGE_RECOGNITION_MODEL"])
         
     def getFeatureVector(self, url):
-        image = Image.open(requests.get(url, stream=True).raw)
+        image = Image.open(requests.get(url, stream=True).raw).convert("RGB")
 
         inputs = self.processor(images=image, return_tensors="pt")
         outputs = self.model(**inputs)
