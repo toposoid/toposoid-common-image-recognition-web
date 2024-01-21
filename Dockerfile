@@ -1,4 +1,4 @@
-FROM python:3.9
+FROM python:3.9.16
 
 WORKDIR /app
 ARG TARGET_BRANCH
@@ -10,7 +10,8 @@ RUN apt-get update \
 && cd toposoid-common-image-recognition-web \
 && git fetch origin ${TARGET_BRANCH} \
 && git checkout ${TARGET_BRANCH} \
-&& pip install --no-cache-dir --trusted-host pypi.python.org -r requirements.txt
+&& pip install --no-cache-dir --trusted-host pypi.python.org -r requirements.txt \
+&& python downloadModel.py
 
 
 COPY ./docker-entrypoint.sh /app/

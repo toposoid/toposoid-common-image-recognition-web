@@ -29,7 +29,12 @@ import traceback
 from middleware import ErrorHandlingMiddleware
 from model import SingleImage, FeatureVector
 from VitUtils import VitUtils
-vitUtils = VitUtils()
+from MobileVitUtils import MobileVitUtils
+
+#vitUtils = VitUtils()
+#mobileVitUtils = MobileVitUtils()
+
+vitUtils = MobileVitUtils() if os.environ["TOPOSOID_IMAGE_RECOGNITION_MOBILE_VIT_USE"] == "1" else VitUtils()
 
 app = FastAPI(
     title="toposoid-common-image-recognition-web",
@@ -49,7 +54,7 @@ app.add_middleware(
 
 @app.post("/getFeatureVector")
 def getFeatureVector(input:SingleImage):
-    try:        
+    try:   
         vector = vitUtils.getFeatureVector(input.url)
         return JSONResponse(content=jsonable_encoder(FeatureVector(vector=vector.tolist())))
     except Exception as e:
