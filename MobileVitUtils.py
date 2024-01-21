@@ -16,23 +16,18 @@
 
 import os 
 import numpy as np
-from transformers import ViTImageProcessor, ViTForImageClassification
+from transformers import MobileViTFeatureExtractor, MobileViTForImageClassification
 from PIL import Image
 import requests
-from logging import config
-config.fileConfig('logging.conf')
-import logging
-LOG = logging.getLogger(__name__)
-import traceback
 
 
-class VitUtils():
+class MobileVitUtils():
     model = None
     processor = None
 
     def __init__(self) :
-        self.processor = ViTImageProcessor.from_pretrained(os.environ["TOPOSOID_IMAGE_RECOGNITION_VIT_MODEL"])
-        self.model = ViTForImageClassification.from_pretrained(os.environ["TOPOSOID_IMAGE_RECOGNITION_VIT_MODEL"])
+        self.processor = MobileViTFeatureExtractor.from_pretrained(os.environ["TOPOSOID_IMAGE_RECOGNITION_MOBILE_VIT_MODEL"])
+        self.model = MobileViTForImageClassification.from_pretrained(os.environ["TOPOSOID_IMAGE_RECOGNITION_MOBILE_VIT_MODEL"])
     
     def getFeatureVector(self, url):
         image = Image.open(requests.get(url, stream=True).raw).convert("RGB")
