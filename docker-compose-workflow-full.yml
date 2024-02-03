@@ -6,6 +6,6 @@ services:
     environment:
       - TOPOSOID_IMAGE_RECOGNITION_VIT_MODEL=google/vit-base-patch16-224
       - TOPOSOID_IMAGE_RECOGNITION_MOBILE_VIT_MODEL=apple/mobilevit-small
-      - TOPOSOID_IMAGE_RECOGNITION_MOBILE_VIT_USE=1
+      - TOPOSOID_IMAGE_RECOGNITION_MOBILE_VIT_USE=0
     ports:
       - 9013:9013
