@@ -2,6 +2,7 @@ FROM python:3.9.16
 
 WORKDIR /app
 ARG TARGET_BRANCH
+ARG IMAGE_RECOGNITION_MODEL
 ENV DEPLOYMENT=local
 
 RUN apt-get update \
@@ -11,7 +12,7 @@ RUN apt-get update \
 && git fetch origin ${TARGET_BRANCH} \
 && git checkout ${TARGET_BRANCH} \
 && pip install --no-cache-dir --trusted-host pypi.python.org -r requirements.txt \
-&& python downloadModel.py
+&& python downloadModel-${IMAGE_RECOGNITION_MODEL}.py
 
 
 COPY ./docker-entrypoint.sh /app/
