@@ -25,6 +25,7 @@ jobs:
             docker-compose -f docker-compose-workflow.yml up -d            
             docker-compose logs
             docker-compose -f docker-compose-workflow.yml exec -T ${{ env.PJ_REPO }} bash -c "cd ${{ env.PJ_REPO }} && pytest -v"            
+            docker rm --force $(docker ps -a -q) > /dev/null 2>&1 && :
             docker rmi --force ${{ env.PJ_REPO }}:${{ env.PJ_VERSION }}            
             docker system prune -f
             docker volume prune -f 
