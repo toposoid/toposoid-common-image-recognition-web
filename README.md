@@ -33,7 +33,7 @@ curl -X POST -H "Content-Type: application/json" -d '{"url": "http://images.coco
 * This microservice uses 9013 as the default port.
 
 ## License
-toposoid/scala-data-accessor-neo4j-web is Open Source software released under the [Apache 2.0 license](https://www.apache.org/licenses/LICENSE-2.0.html).
+toposoid/toposoid-common-image-recognition-web is Open Source software released under the [Apache 2.0 license](https://www.apache.org/licenses/LICENSE-2.0.html).
 
 ## Author
 * Makoto Kubodera([Linked Ideal LLC.](https://linked-ideal.com/))
