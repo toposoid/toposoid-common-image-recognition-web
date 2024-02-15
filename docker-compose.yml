@@ -1,7 +1,7 @@
 version: '3'
 services:
   toposoid-common-image-recognition-web:
-    image: toposoid/toposoid-common-image-recognition-web:0.5-SNAPSHOT-lowspec
+    image: toposoid/toposoid-common-image-recognition-web:0.5-lowspec
     environment:
       - TOPOSOID_IMAGE_RECOGNITION_VIT_MODEL=google/vit-base-patch16-224
       - TOPOSOID_IMAGE_RECOGNITION_MOBILE_VIT_MODEL=apple/mobilevit-small
