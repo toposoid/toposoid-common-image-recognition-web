@@ -27,3 +27,6 @@ class FeatureVector(BaseModel):
 class StatusInfo(BaseModel):
     status:str
     message:str
+
+class TransversalState(BaseModel):
+    username:str

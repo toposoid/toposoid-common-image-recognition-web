@@ -14,22 +14,24 @@
   limitations under the License.
  '''
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Header
 from model import StatusInfo
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from starlette.middleware.cors import CORSMiddleware
+from typing import Optional
+import traceback
+from middleware import ErrorHandlingMiddleware
+from model import SingleImage, FeatureVector, TransversalState
+from VitUtils import VitUtils
+from MobileVitUtils import MobileVitUtils
+from utils import formatMessageForLogger
 
 import os
 from logging import config
 config.fileConfig('logging.conf')
 import logging
 LOG = logging.getLogger(__name__)
-import traceback
-from middleware import ErrorHandlingMiddleware
-from model import SingleImage, FeatureVector
-from VitUtils import VitUtils
-from MobileVitUtils import MobileVitUtils
 
 #vitUtils = VitUtils()
 #mobileVitUtils = MobileVitUtils()
@@ -38,7 +40,7 @@ vitUtils = MobileVitUtils() if os.environ["TOPOSOID_IMAGE_RECOGNITION_MOBILE_VIT
 
 app = FastAPI(
     title="toposoid-common-image-recognition-web",
-    version="0.5-SNAPSHOT"
+    version="0.6-SNAPSHOT"
 )
 app.add_middleware(ErrorHandlingMiddleware)
 
@@ -53,10 +55,13 @@ app.add_middleware(
 
 
 @app.post("/getFeatureVector")
-def getFeatureVector(input:SingleImage):
+def getFeatureVector(input:SingleImage, X_TOPOSOID_TRANSVERSAL_STATE: Optional[str] = Header(None, convert_underscores=False)):
     try:   
+        transversalState = TransversalState.parse_raw(X_TOPOSOID_TRANSVERSAL_STATE.replace("'", "\""))
         vector = vitUtils.getFeatureVector(input.url)
-        return JSONResponse(content=jsonable_encoder(FeatureVector(vector=vector.tolist())))
+        response = JSONResponse(content=jsonable_encoder(FeatureVector(vector=vector.tolist())))
+        LOG.info(formatMessageForLogger("Image vector encoding completed.", transversalState.username),extra={"tab":"\t"})
+        return response
     except Exception as e:
-        LOG.error(traceback.format_exc())
+        LOG.error(formatMessageForLogger(traceback.format_exc(), transversalState.username),extra={"tab":"\t"})
         return JSONResponse({"status": "ERROR", "message": traceback.format_exc()})

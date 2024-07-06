@@ -16,17 +16,19 @@
 
 from fastapi.testclient import TestClient
 from api import app
-from model import FeatureVector
+from model import FeatureVector, TransversalState
 import pytest
 import math
 import os
+from fastapi.encoders import jsonable_encoder
 
 #This is a unit test module
 client = TestClient(app)
+transversalState = str(jsonable_encoder(TransversalState(username="guest")))
 
 def test_getFeatureVector():
     response = client.post("/getFeatureVector",
-                        headers={"Content-Type": "application/json"},
+                        headers={"Content-Type": "application/json", "X_TOPOSOID_TRANSVERSAL_STATE": transversalState},
                         json={"url": "http://images.cocodataset.org/val2017/000000039769.jpg"})    
 
     assert response.status_code == 200
@@ -43,7 +45,7 @@ def test_getFeatureVector():
 
 def test_getFeatureVector2():
     response = client.post("/getFeatureVector",
-                        headers={"Content-Type": "application/json"},
+                        headers={"Content-Type": "application/json", "X_TOPOSOID_TRANSVERSAL_STATE": transversalState},
                         json={"url": "https://avatars.githubusercontent.com/u/82787843?v=4"})    
 
     assert response.status_code == 200
