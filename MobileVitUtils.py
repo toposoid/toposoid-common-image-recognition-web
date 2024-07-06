@@ -16,7 +16,7 @@
 
 import os 
 import numpy as np
-from transformers import AutoImageProcessor, MobileViTForImageClassification
+from transformers import MobileViTFeatureExtractor, MobileViTForImageClassification
 from PIL import Image
 import requests
 
@@ -26,7 +26,7 @@ class MobileVitUtils():
     processor = None
 
     def __init__(self) :
-        self.processor = AutoImageProcessor.from_pretrained(os.environ["TOPOSOID_IMAGE_RECOGNITION_MOBILE_VIT_MODEL"])
+        self.processor = MobileViTFeatureExtractor.from_pretrained(os.environ["TOPOSOID_IMAGE_RECOGNITION_MOBILE_VIT_MODEL"])
         self.model = MobileViTForImageClassification.from_pretrained(os.environ["TOPOSOID_IMAGE_RECOGNITION_MOBILE_VIT_MODEL"])
     
     def getFeatureVector(self, url):
