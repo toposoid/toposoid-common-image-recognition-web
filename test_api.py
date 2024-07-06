@@ -32,6 +32,7 @@ def test_getFeatureVector():
                         json={"url": "http://images.cocodataset.org/val2017/000000039769.jpg"})    
 
     assert response.status_code == 200
+    print(response.json())
     featureVector = FeatureVector.parse_obj(response.json())    
     
     if os.environ["TOPOSOID_IMAGE_RECOGNITION_MOBILE_VIT_USE"] == "1":
