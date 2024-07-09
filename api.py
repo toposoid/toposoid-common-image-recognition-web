@@ -20,6 +20,7 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from starlette.middleware.cors import CORSMiddleware
 from typing import Optional
+import yaml
 import traceback
 from middleware import ErrorHandlingMiddleware
 from model import SingleImage, FeatureVector, TransversalState
@@ -29,7 +30,7 @@ from utils import formatMessageForLogger
 
 import os
 from logging import config
-config.fileConfig('logging.conf')
+config.dictConfig(yaml.load(open("logging.yml", encoding="utf-8").read(), Loader=yaml.SafeLoader))
 import logging
 LOG = logging.getLogger(__name__)
 
