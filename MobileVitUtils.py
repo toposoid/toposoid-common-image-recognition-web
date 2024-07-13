@@ -18,6 +18,7 @@ import os
 import numpy as np
 from transformers import MobileViTFeatureExtractor, MobileViTForImageClassification
 from PIL import Image
+from PIL import ImageFile
 import requests
 
 
@@ -30,6 +31,7 @@ class MobileVitUtils():
         self.model = MobileViTForImageClassification.from_pretrained(os.environ["TOPOSOID_IMAGE_RECOGNITION_MOBILE_VIT_MODEL"])
     
     def getFeatureVector(self, url):
+        ImageFile.LOAD_TRUNCATED_IMAGES = True        
         image = Image.open(requests.get(url, stream=True).raw).convert("RGB")
 
         inputs = self.processor(images=image, return_tensors="pt")
