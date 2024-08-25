@@ -24,9 +24,9 @@ jobs:
             cd ${GITHUB_WORKSPACE} && cd ../
             cd ./${{ env.PJ_REPO }}
             docker build --build-arg TARGET_BRANCH=${{ env.PJ_BRANCH }} --build-arg IMAGE_RECOGNITION_MODEL=vit-base-patch16-224 --tag ${{ env.PJ_REPO }}:${{ env.PJ_VERSION }} -f Dockerfile-workflow .
-            docker-compose -f docker-compose-workflow-full.yml up -d            
-            docker-compose logs
-            docker-compose -f docker-compose-workflow-full.yml exec -T ${{ env.PJ_REPO }} bash -c "cd ${{ env.PJ_REPO }} && pytest -v"            
+            docker compose -f docker-compose-workflow-full.yml up -d            
+            docker compose logs
+            docker compose -f docker-compose-workflow-full.yml exec -T ${{ env.PJ_REPO }} bash -c "cd ${{ env.PJ_REPO }} && pytest -v"            
             docker rm --force $(docker ps -a -q) > /dev/null 2>&1 && :
             docker rmi --force ${{ env.PJ_REPO }}:${{ env.PJ_VERSION }}            
             docker system prune -f

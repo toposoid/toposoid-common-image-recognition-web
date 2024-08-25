@@ -61,8 +61,8 @@ def getFeatureVector(input:SingleImage, X_TOPOSOID_TRANSVERSAL_STATE: Optional[s
     try:           
         vector = vitUtils.getFeatureVector(input.url)
         response = JSONResponse(content=jsonable_encoder(FeatureVector(vector=vector.tolist())))
-        LOG.info(formatMessageForLogger("Image vector encoding completed.", transversalState.username))
+        LOG.info(formatMessageForLogger("Image vector encoding completed.", transversalState.userId))
         return response
     except Exception as e:
-        LOG.error(formatMessageForLogger(traceback.format_exc(), transversalState.username))
+        LOG.error(formatMessageForLogger(traceback.format_exc(), transversalState.userId))
         return JSONResponse({"status": "ERROR", "message": traceback.format_exc()})
