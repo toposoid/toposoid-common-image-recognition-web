@@ -29,4 +29,7 @@ class StatusInfo(BaseModel):
     message:str
 
 class TransversalState(BaseModel):
-    username:str
+    userId: str
+    roleId: int
+    username: str
+    csrfToken: str
