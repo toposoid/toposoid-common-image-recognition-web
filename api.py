@@ -1,38 +1,38 @@
 '''
-  Copyright 2021 Linked Ideal LLC.[https://linked-ideal.com/]
+  Copyright (C) 2025  Linked Ideal LLC.[https://linked-ideal.com/]
  
-  Licensed under the Apache License, Version 2.0 (the "License");
-  you may not use this file except in compliance with the License.
-  You may obtain a copy of the License at
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Affero General Public License as
+  published by the Free Software Foundation, version 3.
  
-      http://www.apache.org/licenses/LICENSE-2.0
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU Affero General Public License for more details.
  
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
- '''
-
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+'''
 from fastapi import FastAPI, Header
-from model import StatusInfo
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from starlette.middleware.cors import CORSMiddleware
 from typing import Optional
-import yaml
+#import yaml
 import traceback
 from middleware import ErrorHandlingMiddleware
-from model import SingleImage, FeatureVector, TransversalState
+from ToposoidCommon.model import TransversalState, StatusInfo, SingleImage, FeatureVector
 from VitUtils import VitUtils
 from MobileVitUtils import MobileVitUtils
-from utils import formatMessageForLogger
+
 
 import os
-from logging import config
-config.dictConfig(yaml.load(open("logging.yml", encoding="utf-8").read(), Loader=yaml.SafeLoader))
-import logging
-LOG = logging.getLogger(__name__)
+#from logging import config
+#config.dictConfig(yaml.load(open("logging.yml", encoding="utf-8").read(), Loader=yaml.SafeLoader))
+#import logging
+#LOG = logging.getLogger(__name__)
+import ToposoidCommon as tc
+LOG = tc.LogUtils(__name__)
 
 #vitUtils = VitUtils()
 #mobileVitUtils = MobileVitUtils()
@@ -61,8 +61,8 @@ def getFeatureVector(input:SingleImage, X_TOPOSOID_TRANSVERSAL_STATE: Optional[s
     try:           
         vector = vitUtils.getFeatureVector(input.url)
         response = JSONResponse(content=jsonable_encoder(FeatureVector(vector=vector.tolist())))
-        LOG.info(formatMessageForLogger("Image vector encoding completed.", transversalState.userId))
+        LOG.info("Image vector encoding completed.", transversalState)
         return response
     except Exception as e:
-        LOG.error(formatMessageForLogger(traceback.format_exc(), transversalState.userId))
-        return JSONResponse({"status": "ERROR", "message": traceback.format_exc()})
+        LOG.error(traceback.format_exc(), transversalState)
+        return JSONResponse(content=jsonable_encoder(StatusInfo(status="ERROR", message=traceback.format_exc())))
