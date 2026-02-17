@@ -7,7 +7,7 @@ ENV DEPLOYMENT=local
 
 SHELL ["/bin/bash", "-c"]
 
-RRUN apt-get update \
+RUN apt-get update \
 && apt-get -y install git unzip \
 && curl -LsSf https://astral.sh/uv/install.sh | sh \
 && source ${HOME}/.local/bin/env \
