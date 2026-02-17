@@ -1,4 +1,5 @@
 #!/bin/bash
 
 cd /app/toposoid-common-image-recognition-web
-uvicorn api:app --reload --host 0.0.0.0 --port 9013
+source /root/.local/bin/env
+uv run uvicorn api:app --reload --host 0.0.0.0 --port 9013
