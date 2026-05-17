@@ -13,7 +13,7 @@ jobs:
   unit-test_toposoid-common-image-recognition-web-amd64:
     uses: ./.github/workflows/action-amd64.yml
     secrets: inherit  
-  unit-test_oposoid-common-image-recognition-web-arm64:
+  unit-test_toposoid-common-image-recognition-web-arm64:
     uses: ./.github/workflows/action-arm64.yml
     secrets: inherit  
   merge-and-push-base-manifest: 
