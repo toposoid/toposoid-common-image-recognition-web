@@ -19,7 +19,7 @@ from transformers import MobileViTFeatureExtractor, MobileViTForImageClassificat
 from PIL import Image
 from PIL import ImageFile
 import requests
-
+from fastapi.encoders import jsonable_encoder
 
 class MobileVitUtils():
     model = None
@@ -29,9 +29,10 @@ class MobileVitUtils():
         self.processor = MobileViTFeatureExtractor.from_pretrained(os.environ["TOPOSOID_IMAGE_RECOGNITION_MOBILE_VIT_MODEL"])
         self.model = MobileViTForImageClassification.from_pretrained(os.environ["TOPOSOID_IMAGE_RECOGNITION_MOBILE_VIT_MODEL"])
     
-    def getFeatureVector(self, url):
-        ImageFile.LOAD_TRUNCATED_IMAGES = True        
-        image = Image.open(requests.get(url, stream=True).raw).convert("RGB")
+    def getFeatureVector(self, url, transversalState):
+        ImageFile.LOAD_TRUNCATED_IMAGES = True   
+        requestHeaders = {'X_TOPOSOID_TRANSVERSAL_STATE': str(jsonable_encoder(transversalState))}      
+        image = Image.open(requests.get(url, headers=requestHeaders, stream=True).raw).convert("RGB")
 
         inputs = self.processor(images=image, return_tensors="pt")
         outputs = self.model(**inputs)

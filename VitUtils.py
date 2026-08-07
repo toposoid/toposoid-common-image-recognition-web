@@ -19,6 +19,7 @@ from transformers import ViTImageProcessor, ViTForImageClassification
 from PIL import Image
 import requests
 import ToposoidCommon as tc
+from fastapi.encoders import jsonable_encoder
 LOG = tc.LogUtils(__name__)
 
 #from logging import config
@@ -36,9 +37,9 @@ class VitUtils():
         self.processor = ViTImageProcessor.from_pretrained(os.environ["TOPOSOID_IMAGE_RECOGNITION_VIT_MODEL"])
         self.model = ViTForImageClassification.from_pretrained(os.environ["TOPOSOID_IMAGE_RECOGNITION_VIT_MODEL"])
     
-    def getFeatureVector(self, url):
-        image = Image.open(requests.get(url, stream=True).raw).convert("RGB")
-
+    def getFeatureVector(self, url, transversalState):
+        requestHeaders = {'X_TOPOSOID_TRANSVERSAL_STATE': str(jsonable_encoder(transversalState))}      
+        image = Image.open(requests.get(url, headers=requestHeaders, stream=True).raw).convert("RGB")
         inputs = self.processor(images=image, return_tensors="pt")
         outputs = self.model(**inputs)
         logits = outputs.logits

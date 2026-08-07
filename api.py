@@ -59,7 +59,7 @@ app.add_middleware(
 def getFeatureVector(input:SingleImage, X_TOPOSOID_TRANSVERSAL_STATE: Optional[str] = Header(None, convert_underscores=False)):
     transversalState = TransversalState.parse_raw(X_TOPOSOID_TRANSVERSAL_STATE.replace("'", "\""))
     try:           
-        vector = vitUtils.getFeatureVector(input.url)
+        vector = vitUtils.getFeatureVector(input.url, transversalState)
         response = JSONResponse(content=jsonable_encoder(FeatureVector(vector=vector.tolist())))
         LOG.info("Image vector encoding completed.", transversalState)
         return response
